@@ -1,5 +1,6 @@
 package kw.pollub.myboardgamelist.controller;
 
+import kw.pollub.myboardgamelist.exception.CategoryNotFoundException;
 import kw.pollub.myboardgamelist.exception.UserAlreadyExistsException;
 import kw.pollub.myboardgamelist.exception.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -39,7 +40,16 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<?> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
+    public ResponseEntity<?> handleUserAlreadyExistsException(UserAlreadyExistsException exception, WebRequest request) {
+        Map<String, Object> nameToMessage = new HashMap<>();
+        nameToMessage.put("timestamp", new Date());
+        nameToMessage.put("msg", exception.getMessage());
+
+        return new ResponseEntity<>(nameToMessage, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<?> handleCategoryNotFoundException(CategoryNotFoundException exception, WebRequest webRequest) {
         Map<String, Object> nameToMessage = new HashMap<>();
         nameToMessage.put("timestamp", new Date());
         nameToMessage.put("msg", exception.getMessage());
