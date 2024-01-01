@@ -54,13 +54,14 @@ public class JwtUtils implements Serializable {
 
     public String generateToken(Authentication authentication) {
         Map<String, Object> claims = new HashMap<>();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return doGenerateToken(claims, userDetails.getUsername());
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        return doGenerateToken(claims, userDetails.getUsername(), userDetails.getId());
     }
 
-    private String doGenerateToken(Map<String, Object> claims, String username) {
+    private String doGenerateToken(Map<String, Object> claims, String username, Long userId) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("id", userId)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(SignatureAlgorithm.HS512, secret)

@@ -1,5 +1,6 @@
 package kw.pollub.myboardgamelist.service;
 
+import kw.pollub.myboardgamelist.config.UserDetailsImpl;
 import kw.pollub.myboardgamelist.model.User;
 import kw.pollub.myboardgamelist.exception.UserAlreadyExistsException;
 import kw.pollub.myboardgamelist.exception.UserNotFoundException;
@@ -25,11 +26,7 @@ public class UserService implements IUserService, UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findUsersByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                new ArrayList<>()
-        );
+        return UserDetailsImpl.build(user);
     }
 
     @Override

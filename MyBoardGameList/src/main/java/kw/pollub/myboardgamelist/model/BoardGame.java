@@ -1,9 +1,8 @@
 package kw.pollub.myboardgamelist.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
-import kw.pollub.myboardgamelist.model.constraints.ValidPassword;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,14 +10,13 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "users")
+@Table(name = "board_games")
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class BoardGame {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,14 +24,17 @@ public class User {
     @NotEmpty
     @Column(nullable = false)
     private String name;
-    @Email
     @NotEmpty
     @Column(nullable = false)
-    private String email;
-    @NotEmpty
-    @ValidPassword
-    @Column(nullable = false, unique = true)
-    private String password;
+    private String developer;
+    private String description;
+    @Min(0)
+    private Integer minNumberOfPlayers;
+    @Min(0)
+    private Integer maxNumberOfPlayers;
+    @Min(0)
+    private Double numberOfHours;
+    private String picture;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -42,7 +43,12 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "owner")
-    private List<BoardGame> boardGames;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User owner;
+
+    @ManyToOne
+    @JoinColumn(name = "catefory_id")
+    private Category category;
 
 }
