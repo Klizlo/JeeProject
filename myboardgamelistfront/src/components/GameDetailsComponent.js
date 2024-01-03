@@ -30,6 +30,7 @@ export default function GameDetailsComponent(game) {
             } else if (response.status === 401) {
                 setOpenAlert(true);
                 setError("Nieautoryzowane działanie");
+                return Promise.reject(new Error());
             } else {
                 return response.json()
             }
@@ -37,7 +38,7 @@ export default function GameDetailsComponent(game) {
             .then((result) => {
                 setOpenAlert(true);
                 setError("Nie znaleziono gry");
-            })
+            }, (error) => console.log(error))
     }
 
     return (<Box>

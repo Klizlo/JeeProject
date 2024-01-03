@@ -28,6 +28,7 @@ export default function EditGamePage() {
             .then((response) => {
                 if (response.status === 401) {
                     window.location = '/';
+                    return Promise.reject(new Error());
                 } else {
                     return response.json();
                 }
@@ -40,7 +41,7 @@ export default function EditGamePage() {
                     setError(`Nie znaleziono gry o id równym ${id}`);
                     setOpenAlert(true);
                 }
-            })
+            }, (error) => console.log(error))
     }, []);
 
     const handleAlert = (e) => {

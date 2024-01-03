@@ -3,6 +3,7 @@ package kw.pollub.myboardgamelist.controller;
 import kw.pollub.myboardgamelist.config.UserDetailsImpl;
 import kw.pollub.myboardgamelist.dto.*;
 import kw.pollub.myboardgamelist.exception.UnauthorizedException;
+import kw.pollub.myboardgamelist.model.BoardGame;
 import kw.pollub.myboardgamelist.service.IBoardGameService;
 import kw.pollub.myboardgamelist.service.ICategoryService;
 import lombok.RequiredArgsConstructor;
@@ -44,9 +45,14 @@ public class UserController {
             throw new UnauthorizedException();
         }
 
+        BoardGame boardGame = boardGameService.findBoardGameWithCategoryAndOwnerById(boardGameId);
+
+        if (!boardGame.getOwner().getId().equals(loggedUser.getId())) {
+            throw new UnauthorizedException();
+        }
+
         return BoardGameDtoMapper
-                .mapToBoardGameWithCategoryDto(boardGameService
-                        .findBoardGameWithCategoryById(boardGameId));
+                .mapToBoardGameWithCategoryDto(boardGame);
     }
 
     @GetMapping("/{userId}/boardGames-by-category")

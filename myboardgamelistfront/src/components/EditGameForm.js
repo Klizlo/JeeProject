@@ -51,6 +51,7 @@ export default function EditGameForm({game}) {
                 .then((response) => {
                     if (response.status === 401) {
                         window.location = '/';
+                        return Promise.reject(new Error());
                     } else {
                         return response.json();
                     }
@@ -64,7 +65,7 @@ export default function EditGameForm({game}) {
                         setError(result.msg);
                         setOpenAlert(true);
                     }
-                })
+                }, (error) => console.log(error))
         } else {
             setOpenAlert(true);
         }

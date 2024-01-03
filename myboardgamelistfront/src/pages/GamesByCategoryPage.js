@@ -55,6 +55,7 @@ export default function GamesByCategoryPage() {
             console.log(response);
             if (response.status === 401) {
                 window.location = '/';
+                return Promise.reject(new Error());
             } else if (response.ok) {
                 return response.json()
             }
@@ -63,7 +64,7 @@ export default function GamesByCategoryPage() {
             console.log(result)
             setData(result);
             console.log(result);
-        })
+        }, (error) => console.log(error))
     }, []);
 
     const [open, setOpen] = useState({});

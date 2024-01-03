@@ -63,6 +63,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(nameToMessage, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<?> handleUnauthorizedException(UnauthorizedException exception, WebRequest request) {
+        Map<String, Object> nameToMessage = new HashMap<>();
+        nameToMessage.put("timestamp", new Date());
+        nameToMessage.put("msg", exception.getMessage());
+
+        return new ResponseEntity<>(nameToMessage, HttpStatus.UNAUTHORIZED);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         Map<String, String> errors = new HashMap<>();

@@ -37,6 +37,7 @@ function App() {
         localStorage.removeItem("user");
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("user");
+        window.location.reload();
       }
     } catch (err) {
       console.log(err);
