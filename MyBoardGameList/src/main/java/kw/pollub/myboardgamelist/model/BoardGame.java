@@ -3,6 +3,7 @@ package kw.pollub.myboardgamelist.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,6 +18,7 @@ import java.util.Objects;
 @Setter
 @Table(name = "board_games")
 @EntityListeners(AuditingEntityListener.class)
+@Builder
 public class BoardGame {
 
     @Id

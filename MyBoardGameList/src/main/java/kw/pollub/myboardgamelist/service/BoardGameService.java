@@ -53,7 +53,9 @@ public class BoardGameService implements IBoardGameService{
         owner.addBoardGame(boardGame);
 
         boardGame.setOwner(owner);
-        boardGame.setCategory(category);
+//        boardGame.setCategory(category);
+
+        System.out.println(boardGame.getId());
 
         return boardGameRepository.save(boardGame);
     }

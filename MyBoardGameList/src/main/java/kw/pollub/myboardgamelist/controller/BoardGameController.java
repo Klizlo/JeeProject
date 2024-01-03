@@ -20,15 +20,17 @@ import org.springframework.web.bind.annotation.*;
 public class BoardGameController {
 
     private final IBoardGameService boardGameService;
+    private final BoardGameDtoMapper boardGameDtoMapper;
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public BoardGameWithCategoryDto addBoardGame(@Valid @RequestBody BoardGame boardGame, Authentication authentication) {
+    public BoardGameWithCategoryDto addBoardGame(@Valid @RequestBody BoardGameWithCategoryDto boardGame, Authentication authentication) {
         UserDetailsImpl loggedUser = (UserDetailsImpl) authentication.getPrincipal();
-        boardGame.setOwner(new User());
-        boardGame.getOwner().setId(loggedUser.getId());
+        BoardGame boardGame1 = boardGameDtoMapper.mapToBoardGame(boardGame);
+        boardGame1.setOwner(new User());
+        boardGame1.getOwner().setId(loggedUser.getId());
 
-        return BoardGameDtoMapper.mapToBoardGameWithCategoryDto(boardGameService.addBoardGame(boardGame));
+        return BoardGameDtoMapper.mapToBoardGameWithCategoryDto(boardGameService.addBoardGame(boardGame1));
     }
 
     @PutMapping("/{boardGameId}")
