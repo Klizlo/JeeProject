@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/boardGames")
+@CrossOrigin(value = "*", maxAge = 36000)
 public class BoardGameController {
 
     private final IBoardGameService boardGameService;

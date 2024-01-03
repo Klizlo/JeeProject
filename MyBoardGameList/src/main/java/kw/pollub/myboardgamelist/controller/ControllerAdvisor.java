@@ -1,9 +1,6 @@
 package kw.pollub.myboardgamelist.controller;
 
-import kw.pollub.myboardgamelist.exception.BoardGameNotFoundException;
-import kw.pollub.myboardgamelist.exception.CategoryNotFoundException;
-import kw.pollub.myboardgamelist.exception.UserAlreadyExistsException;
-import kw.pollub.myboardgamelist.exception.UserNotFoundException;
+import kw.pollub.myboardgamelist.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -55,6 +52,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         nameToMessage.put("msg", exception.getMessage());
 
         return new ResponseEntity<>(nameToMessage, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RefreshTokenException.class)
+    public ResponseEntity<?> handleRefreshTokenException(RefreshTokenException exception, WebRequest request) {
+        Map<String, Object> nameToMessage = new HashMap<>();
+        nameToMessage.put("timestamp", new Date());
+        nameToMessage.put("msg", exception.getMessage());
+
+        return new ResponseEntity<>(nameToMessage, HttpStatus.UNAUTHORIZED);
     }
 
     @Override

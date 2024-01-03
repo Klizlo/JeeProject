@@ -4,16 +4,14 @@ import kw.pollub.myboardgamelist.dto.CategoryDto;
 import kw.pollub.myboardgamelist.dto.CategoryDtoMapper;
 import kw.pollub.myboardgamelist.service.ICategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/categories")
+@CrossOrigin(value = "*", maxAge = 36000)
 public class CategoryController {
 
     private final ICategoryService categoryService;
