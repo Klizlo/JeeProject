@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -29,11 +30,11 @@ public class BoardGame {
     private String developer;
     private String description;
     @Min(0)
-    private Integer minNumberOfPlayers;
+    private Integer minNumberOfPlayers = 0;
     @Min(0)
-    private Integer maxNumberOfPlayers;
+    private Integer maxNumberOfPlayers = 0;
     @Min(0)
-    private Double numberOfHours;
+    private Double numberOfHours = 0.;
     private String picture;
 
     @CreatedDate
@@ -48,7 +49,19 @@ public class BoardGame {
     private User owner;
 
     @ManyToOne
-    @JoinColumn(name = "catefory_id")
+    @JoinColumn(name = "category_id")
     private Category category;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoardGame boardGame = (BoardGame) o;
+        return Objects.equals(id, boardGame.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

@@ -27,6 +27,11 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
+    public List<Category> findAllCategoriesWithBoardGamesByOwnerId(Long userId) {
+        return categoryRepository.findAllCategoriesWithBoardGamesByOwnerId(userId);
+    }
+
+    @Override
     public Category addCategory(Category category) {
 
         if (categoryRepository.existsByName(category.getName())) {

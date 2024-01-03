@@ -45,4 +45,12 @@ public class User {
     @OneToMany(mappedBy = "owner")
     private List<BoardGame> boardGames;
 
+    public void addBoardGame(BoardGame boardGame) {
+        boardGames.add(boardGame);
+    }
+
+    public void removeBoardGame(BoardGame boardGame) {
+        boardGames.remove(boardGame);
+    }
+
 }

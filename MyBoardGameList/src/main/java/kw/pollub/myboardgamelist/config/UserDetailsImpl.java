@@ -13,7 +13,7 @@ public class UserDetailsImpl implements UserDetails {
     private final Long id;
     private final String username;
     @JsonIgnore
-    private String password;
+    private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(Long id, String username, String password,

@@ -8,8 +8,10 @@ public interface IBoardGameService {
 
     List<BoardGame> findAllBoardGamesByOwner(Long userId);
     BoardGame findBoardGameById(Long boardGameId);
+    BoardGame findBoardGameWithCategoryById(Long boardGameId);
+    BoardGame findBoardGameWithCategoryAndOwnerById(Long boardGameId);
     BoardGame addBoardGame(BoardGame boardGame);
-    BoardGame updateBoardGame(BoardGame boardGame, Long boardGameId);
-    void deleteBoardGame(Long boardGameId);
+    BoardGame updateBoardGame(BoardGame boardGame, BoardGame boardGameToEdit);
+    void removeBoardGame(Long boardGameId);
 
 }

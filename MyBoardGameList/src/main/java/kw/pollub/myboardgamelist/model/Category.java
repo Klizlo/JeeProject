@@ -32,6 +32,14 @@ public class Category {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @OneToMany
+    @OneToMany(mappedBy = "category")
     private List<BoardGame> boardGames;
+
+    public void addBoardGame(BoardGame boardGame) {
+        boardGames.add(boardGame);
+    }
+
+    public void removeBoardGame(BoardGame boardGame) {
+        boardGames.remove(boardGame);
+    }
 }

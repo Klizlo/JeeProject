@@ -1,6 +1,10 @@
 package kw.pollub.myboardgamelist.service;
 
+import jakarta.transaction.Transactional;
+import kw.pollub.myboardgamelist.exception.BoardGameNotFoundException;
 import kw.pollub.myboardgamelist.model.BoardGame;
+import kw.pollub.myboardgamelist.model.Category;
+import kw.pollub.myboardgamelist.model.User;
 import kw.pollub.myboardgamelist.repository.BoardGameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +16,8 @@ import java.util.List;
 public class BoardGameService implements IBoardGameService{
 
     private final BoardGameRepository boardGameRepository;
+    private final ICategoryService categoryService;
+    private final IUserService userService;
 
     @Override
     public List<BoardGame> findAllBoardGamesByOwner(Long userId) {
@@ -20,21 +26,62 @@ public class BoardGameService implements IBoardGameService{
 
     @Override
     public BoardGame findBoardGameById(Long boardGameId) {
-        return null;
+        return boardGameRepository.findById(boardGameId)
+                .orElseThrow(() -> new BoardGameNotFoundException(boardGameId));
     }
 
     @Override
+    public BoardGame findBoardGameWithCategoryById(Long boardGameId) {
+        return boardGameRepository.findBoardGameWithCategoryById(boardGameId)
+                .orElseThrow(() -> new BoardGameNotFoundException(boardGameId));
+    }
+
+    @Override
+    public BoardGame findBoardGameWithCategoryAndOwnerById(Long boardGameId) {
+        return boardGameRepository.findBoardGameWithCategoryAndOwnerById(boardGameId)
+                .orElseThrow(() -> new BoardGameNotFoundException(boardGameId));
+    }
+
+    @Override
+    @Transactional
     public BoardGame addBoardGame(BoardGame boardGame) {
-        return null;
+
+        Category category = categoryService.findCategoryById(boardGame.getCategory().getId());
+        User owner = userService.findUserById(boardGame.getOwner().getId());
+
+        category.addBoardGame(boardGame);
+        owner.addBoardGame(boardGame);
+
+        boardGame.setOwner(owner);
+        boardGame.setCategory(category);
+
+        return boardGameRepository.save(boardGame);
     }
 
     @Override
-    public BoardGame updateBoardGame(BoardGame boardGame, Long boardGameId) {
-        return null;
+    @Transactional
+    public BoardGame updateBoardGame(BoardGame boardGame, BoardGame boardGameToEdit) {
+
+        boardGameToEdit.setName(boardGame.getName());
+        boardGameToEdit.setDeveloper(boardGame.getDeveloper());
+        boardGameToEdit.setDescription(boardGame.getDescription());
+        boardGameToEdit.setMinNumberOfPlayers(boardGame.getMinNumberOfPlayers());
+        boardGameToEdit.setMaxNumberOfPlayers(boardGame.getMaxNumberOfPlayers());
+        boardGameToEdit.setNumberOfHours(boardGame.getNumberOfHours());
+        boardGameToEdit.setPicture(boardGame.getPicture());
+
+        if (!boardGame.getCategory().getId().equals(boardGameToEdit.getCategory().getId())) {
+            Category newCategory = categoryService.findCategoryById(boardGame.getCategory().getId());
+            boardGameToEdit.setCategory(newCategory);
+            newCategory.addBoardGame(boardGameToEdit);
+        }
+
+        return boardGameRepository.save(boardGameToEdit);
     }
 
     @Override
-    public void deleteBoardGame(Long boardGameId) {
-
+    @Transactional
+    public void removeBoardGame(Long boardGameId) {
+        boardGameRepository.deleteById(boardGameId);
     }
 }

@@ -21,4 +21,18 @@ public class CategoryDtoMapper {
                 .name(category.getName())
                 .build();
     }
+
+    public static List<CategoryWithBoarGamesDto> mapToCategoryWithBoarGamesDtos(List<Category> categories) {
+        return categories.stream()
+                .map(CategoryDtoMapper::mapToCategoryWithBoarGamesDto)
+                .toList();
+    }
+
+    private static CategoryWithBoarGamesDto mapToCategoryWithBoarGamesDto(Category category) {
+        return CategoryWithBoarGamesDto.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .boardGames(BoardGameDtoMapper.mapToBoardGameDtos(category.getBoardGames()))
+                .build();
+    }
 }

@@ -19,12 +19,12 @@ public class CategoryController {
     private final ICategoryService categoryService;
 
     @GetMapping("")
-    public List<CategoryDto> findAllCategories() {
+    public List<CategoryDto> getAllCategories() {
         return CategoryDtoMapper.mapToCategoryDtos(categoryService.findAllCategories());
     }
 
     @GetMapping("/{categoryId}")
-    public CategoryDto findCategoryById(@PathVariable("categoryId") Long categoryId) {
+    public CategoryDto getCategoryById(@PathVariable("categoryId") Long categoryId) {
         return CategoryDtoMapper.mapToCategoryDto(categoryService.findCategoryById(categoryId));
     }
 }

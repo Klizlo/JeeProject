@@ -1,5 +1,6 @@
 package kw.pollub.myboardgamelist.controller;
 
+import kw.pollub.myboardgamelist.exception.BoardGameNotFoundException;
 import kw.pollub.myboardgamelist.exception.CategoryNotFoundException;
 import kw.pollub.myboardgamelist.exception.UserAlreadyExistsException;
 import kw.pollub.myboardgamelist.exception.UserNotFoundException;
@@ -7,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,15 +30,6 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(nameToMessage, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<?> handleUsernameNotFoundException(UsernameNotFoundException exception, WebRequest request) {
-        Map<String, Object> nameToMessage = new HashMap<>();
-        nameToMessage.put("timestamp", new Date());
-        nameToMessage.put("msg", exception.getMessage());
-
-        return new ResponseEntity<>(nameToMessage, HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<?> handleUserAlreadyExistsException(UserAlreadyExistsException exception, WebRequest request) {
         Map<String, Object> nameToMessage = new HashMap<>();
@@ -50,6 +41,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<?> handleCategoryNotFoundException(CategoryNotFoundException exception, WebRequest webRequest) {
+        Map<String, Object> nameToMessage = new HashMap<>();
+        nameToMessage.put("timestamp", new Date());
+        nameToMessage.put("msg", exception.getMessage());
+
+        return new ResponseEntity<>(nameToMessage, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BoardGameNotFoundException.class)
+    public ResponseEntity<?> handleBoardGameNotFoundException(BoardGameNotFoundException exception, WebRequest request) {
         Map<String, Object> nameToMessage = new HashMap<>();
         nameToMessage.put("timestamp", new Date());
         nameToMessage.put("msg", exception.getMessage());
